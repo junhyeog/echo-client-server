@@ -47,7 +47,6 @@ void* echo_response(void* arg) {
         sent_len = send(sockfd, buf, strlen(buf), 0);
         if (sent_len == 0 || sent_len == -1) {
           perror("Failed to broadcast");
-          sem_post(&m);
           break;
         }
       }
