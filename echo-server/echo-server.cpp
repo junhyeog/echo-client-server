@@ -32,7 +32,7 @@ void* echo_response(void* arg) {
     //? Receive response
     response_len = recv(client_sockfd, buf, BUFSIZE - 1, 0);
     if (response_len == 0 || response_len == -1) {
-      perror("Failed to receive\n");
+      perror("Failed to receive");
       break;
     }
     buf[response_len] = '\0';
@@ -46,7 +46,8 @@ void* echo_response(void* arg) {
       for (auto sockfd : client_set) {
         sent_len = send(sockfd, buf, strlen(buf), 0);
         if (sent_len == 0 || sent_len == -1) {
-          perror("Failed to broadcast\n");
+          perror("Failed to broadcast");
+          sem_post(&m);
           break;
         }
       }
@@ -56,7 +57,7 @@ void* echo_response(void* arg) {
     else if (echo_flag) {
       sent_len = send(client_sockfd, buf, strlen(buf), 0);
       if (sent_len == 0 || sent_len == -1) {
-        perror("Failed to echo\n");
+        perror("Failed to echo");
         break;
       }
     }
@@ -92,7 +93,7 @@ int main(int argc, char* argv[]) {
         broadcast_flag = 1;
         break;
       default:
-        perror("Unexpected flag\n");
+        perror("Unexpected flag");
         usage();
         return -1;
     }
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
   //* Create a socket
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd == -1) {
-    perror("Failed to create a socket\n");
+    perror("Failed to create a socket");
     return -1;
   }
 
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
   int optval = 1;
   res = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
   if (sockfd == -1) {
-    perror("Failed to create a socket\n");
+    perror("Failed to create a socket");
     return -1;
   }
 
